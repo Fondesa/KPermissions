@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-apply plugin: "com.android.library"
-apply plugin: "kpermissions-android"
-apply plugin: "kpermissions-android-coverage"
-apply plugin: "kpermissions-deploy"
+rootProject.name = "kpermissions-root"
 
-dependencies {
-    api Deps.androidxFragment
-    api Deps.kotlinStdLib
-
-    testImplementation Deps.androidxFragmentTesting
-    testImplementation Deps.androidxJUnit
-    testImplementation Deps.junit
-    testImplementation Deps.mockitoKotlin
-    testImplementation Deps.mockitoInLine
-    testImplementation Deps.robolectric
-}
+include(":kpermissions")
+include(":kpermissions-coroutines")
+include(":kpermissions-rx2")
+include(":kpermissions-rx3")
+include(":sample")

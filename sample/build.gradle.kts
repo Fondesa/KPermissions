@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-apply plugin: "com.android.library"
-apply plugin: "kpermissions-android"
-apply plugin: "kpermissions-android-coverage"
-apply plugin: "kpermissions-deploy"
+plugins {
+    android
+    `kpermissions-android`
+}
+
+android.defaultConfig.applicationId = "com.fondesa.kpermissions.sample"
 
 dependencies {
-    api project(":kpermissions")
-    api Deps.rxJava2
+    implementation(":kpermissions")
+    implementation(Deps.androidxAppCompat)
 
-    testImplementation Deps.junit
-    testImplementation Deps.mockitoKotlin
+    debugImplementation(Deps.leakCanary)
 }

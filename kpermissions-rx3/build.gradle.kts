@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-rootProject.name = "kpermissions-root"
+plugins {
+    `android-library`
+    `kpermissions-android`
+    `kpermissions-android-coverage`
+    `kpermissions-deploy`
+}
 
-include ":kpermissions"
-include ":kpermissions-coroutines"
-include ":kpermissions-rx2"
-include ":kpermissions-rx3"
-include ":sample"
+dependencies {
+    api(":kpermissions")
+    api(Deps.rxJava3)
+
+    testImplementation(Deps.junit)
+    testImplementation(Deps.mockitoKotlin)
+}
