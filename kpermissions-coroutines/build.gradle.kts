@@ -22,7 +22,7 @@ plugins {
 }
 
 dependencies {
-    api(":kpermissions")
+    api(project(":kpermissions"))
     api(Deps.coroutines)
 
     testImplementation(Deps.junit)

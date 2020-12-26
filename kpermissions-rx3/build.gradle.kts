@@ -22,7 +22,7 @@ plugins {
 }
 
 dependencies {
-    api(":kpermissions")
+    api(project(":kpermissions"))
     api(Deps.rxJava3)
 
     testImplementation(Deps.junit)

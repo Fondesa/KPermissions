@@ -22,7 +22,7 @@ plugins {
 android.defaultConfig.applicationId = "com.fondesa.kpermissions.sample"
 
 dependencies {
-    implementation(":kpermissions")
+    implementation(project(":kpermissions"))
     implementation(Deps.androidxAppCompat)
 
     debugImplementation(Deps.leakCanary)
