@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-import java.util.regex.Pattern
-
-def dependencyLinePattern = Pattern.compile("\\s*const\\s*val\\s*(\\w+)\\s*=\\s*\"([\\w\\d.:\\-]+)\"")
-ext.deps = file("src/main/kotlin/Deps.kt")
-        .readLines()
-        .stream()
-        .map { line ->
-            def matcher = dependencyLinePattern.matcher(line)
-            if (matcher.matches()) new Tuple2(matcher.group(1), matcher.group(2)) else null
-        }
-        .filter { it != null }
-        .collect()
-        .groupBy { it.first }
-        .collectEntries { key, value -> [key, value.second.first()] }
+private val dependencyLinePattern = "\\s*const\\s*val\\s*(\\w+)\\s*=\\s*\"([\\w\\d.:\\-]+)\"".toPattern()
+extra["deps"] = file("src/main/kotlin/Deps.kt")
+    .readLines()
+    .mapNotNull { line ->
+        val matcher = dependencyLinePattern.matcher(line)
+        if (matcher.matches()) matcher.group(1) to matcher.group(2) else null
+    }
+    .toMap()
