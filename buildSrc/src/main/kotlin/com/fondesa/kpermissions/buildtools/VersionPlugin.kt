@@ -28,7 +28,6 @@ import java.io.ByteArrayOutputStream
  * ./gradlew myTask -Pversion.name=1.0.0
  */
 class VersionPlugin : Plugin<Project> {
-
     override fun apply(project: Project) = with(project) {
         version = getPropertyOrElse("version.name") { getVersionNameFromTag() }
     }
@@ -37,8 +36,8 @@ class VersionPlugin : Plugin<Project> {
         val stdOut = ByteArrayOutputStream()
         // Gets the latest tag in the Git repo.
         exec {
-            it.commandLine = listOf("git", "describe", "--tags", "--abbrev=0")
-            it.standardOutput = stdOut
+            commandLine = listOf("git", "describe", "--tags", "--abbrev=0")
+            standardOutput = stdOut
         }
         return stdOut.toString().trim()
     }

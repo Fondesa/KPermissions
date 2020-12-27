@@ -16,23 +16,23 @@
 
 package com.fondesa.kpermissions.buildtools
 
-import org.gradle.api.Action
+import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.gradle.kotlin.dsl.*
 
 /**
  * Applies the base configuration to all the Android modules of this project.
  */
 class AndroidModulePlugin : Plugin<Project> {
-
-    override fun apply(project: Project) = with(project) {
+    override fun apply(project: Project) = project.run {
         plugins.apply("kotlin-android")
         plugins.apply("org.jetbrains.dokka")
         applyFrom("buildSrc/kotlin.gradle")
 
-        withAndroidPlugin {
+        configure<BaseExtension> {
             val androidProperties = readPropertiesOf("android-config.properties")
             compileSdkVersion(androidProperties.getProperty("android.config.compileSdk").toInt())
             buildToolsVersion(androidProperties.getProperty("android.config.buildTools"))
@@ -40,37 +40,29 @@ class AndroidModulePlugin : Plugin<Project> {
                 minSdkVersion(androidProperties.getProperty("android.config.minSdk").toInt())
                 targetSdkVersion(androidProperties.getProperty("android.config.targetSdk").toInt())
             }
-            compileOptions(
-                // Horrible solution to compile against AGP 4.x.
-                @Suppress("RedundantSamConstructor") Action {
-                    it.sourceCompatibility = JavaVersion.VERSION_1_8
-                    it.targetCompatibility = JavaVersion.VERSION_1_8
-                }
-            )
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_1_8
+                targetCompatibility = JavaVersion.VERSION_1_8
+            }
             lintOptions.isWarningsAsErrors = true
-            testOptions.unitTests.apply {
+            testOptions.unitTests {
                 // Used by Robolectric since Android resources can be used in unit tests.
                 isIncludeAndroidResources = true
-                all(
-                    closureOf {
-                        testLogging.events("passed", "skipped", "failed")
-                        systemProperty("robolectric.logging.enabled", true)
-                    }
-                )
+                all {
+                    it.testLogging.events("passed", "skipped", "failed")
+                    it.systemProperty("robolectric.logging.enabled", true)
+                }
             }
             // Adds the Kotlin source set for each Java source set.
-            sourceSets(
-                // Horrible solution to compile against AGP 4.x.
-                @Suppress("RedundantSamConstructor") Action { sourceSetContainer ->
-                    sourceSetContainer.all { sourceSet ->
-                        sourceSet.java.srcDirs("src/${sourceSet.name}/kotlin")
-                    }
+            sourceSets {
+                all {
+                    java.srcDirs("src/$name/kotlin")
                 }
-            )
+            }
         }
-        tasks.withType(DokkaTask::class.java) {
-            it.outputFormat = "html"
-            it.skipEmptyPackages = true
+        tasks.withType<DokkaTask> {
+            outputFormat = "html"
+            skipEmptyPackages = true
         }
         Unit
     }

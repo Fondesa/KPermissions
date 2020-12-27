@@ -16,6 +16,10 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+plugins {
+    `kotlin-dsl`
+}
+
 buildscript {
     apply(from = "repositories.gradle", to = buildscript)
     apply(from = "parse-dependencies.gradle.kts")
@@ -29,7 +33,7 @@ buildscript {
 
 apply(from = "repositories.gradle")
 apply(plugin = "kotlin")
-apply(from = "ktlint.gradle")
+//apply(from = "ktlint.gradle")
 
 // We can't apply kotlin.gradle because otherwise the warnings will be treated as errors.
 // Since Kotlin 1.4.x, we can't compile buildSrc because the Gradle Wrapper contains an old Kotlin version internally.
