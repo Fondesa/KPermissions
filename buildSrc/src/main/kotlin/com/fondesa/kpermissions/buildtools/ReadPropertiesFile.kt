@@ -16,9 +16,9 @@
 
 package com.fondesa.kpermissions.buildtools
 
-import org.gradle.api.Project
 import java.io.File
 import java.util.Properties
+import org.gradle.api.Project
 
 /**
  * Reads the properties file with the given name in one of the two paths with this precedence:

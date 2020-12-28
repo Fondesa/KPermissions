@@ -20,17 +20,19 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.gradle.kotlin.dsl.*
 
 /**
  * Applies the base configuration to all the Android modules of this project.
  */
 class AndroidModulePlugin : Plugin<Project> {
-    override fun apply(project: Project) = project.run {
-        plugins.apply("kotlin-android")
-        plugins.apply("org.jetbrains.dokka")
-        applyFrom("buildSrc/kotlin.gradle")
+    override fun apply(project: Project) = with(project) {
+        apply(plugin = "kotlin-android")
+        apply(plugin = "org.jetbrains.dokka")
+        apply(from = rootProject.file("buildSrc/kotlin.gradle"))
 
         configure<BaseExtension> {
             val androidProperties = readPropertiesOf("android-config.properties")
@@ -54,10 +56,8 @@ class AndroidModulePlugin : Plugin<Project> {
                 }
             }
             // Adds the Kotlin source set for each Java source set.
-            sourceSets {
-                all {
-                    java.srcDirs("src/$name/kotlin")
-                }
+            sourceSets.all {
+                java.srcDirs("src/$name/kotlin")
             }
         }
         tasks.withType<DokkaTask> {

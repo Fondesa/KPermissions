@@ -26,14 +26,13 @@ buildscript {
 
     val deps: Map<String, String> by project.extra
     dependencies {
-        classpath(deps.getValue("kotlinPlugin"))
         classpath(deps.getValue("ktlint"))
     }
 }
 
 apply(from = "repositories.gradle")
 apply(plugin = "kotlin")
-//apply(from = "ktlint.gradle")
+apply(from = "ktlint.gradle")
 
 // We can't apply kotlin.gradle because otherwise the warnings will be treated as errors.
 // Since Kotlin 1.4.x, we can't compile buildSrc because the Gradle Wrapper contains an old Kotlin version internally.
